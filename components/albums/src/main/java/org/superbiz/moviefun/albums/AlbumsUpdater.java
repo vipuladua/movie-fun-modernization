@@ -23,10 +23,13 @@ public class AlbumsUpdater {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final ObjectReader objectReader;
-    private final BlobStore blobStore;
-    private final AlbumsBean albumsBean;
 
-    public AlbumsUpdater(BlobStore blobStore, AlbumsBean albumsBean) {
+
+    private final BlobStore blobStore;
+
+    private final AlbumsRepository albumsBean;
+
+    public AlbumsUpdater(BlobStore blobStore, AlbumsRepository albumsBean) {
         this.blobStore = blobStore;
         this.albumsBean = albumsBean;
 
