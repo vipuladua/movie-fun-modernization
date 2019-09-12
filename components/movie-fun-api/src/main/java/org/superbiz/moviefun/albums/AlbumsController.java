@@ -25,24 +25,24 @@ import static java.lang.String.format;
 public class AlbumsController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final AlbumsRepository albumsRepository;
+    private final AlbumClient albumClient;
     private final BlobStore blobStore;
 
-    public AlbumsController(AlbumsRepository albumsRepository, BlobStore blobStore) {
-        this.albumsRepository = albumsRepository;
+    public AlbumsController(AlbumClient albumClient, BlobStore blobStore) {
+        this.albumClient = albumClient;
         this.blobStore = blobStore;
     }
 
 
     @GetMapping
     public String index(Map<String, Object> model) {
-        model.put("albums", albumsRepository.getAlbums());
+        model.put("albums", albumClient.getAlbums());
         return "albums";
     }
 
     @GetMapping("/{albumId}")
     public String details(@PathVariable long albumId, Map<String, Object> model) {
-        model.put("album", albumsRepository.find(albumId));
+        model.put("album", albumClient.find(albumId));
         return "albumDetails";
     }
 

@@ -1,4 +1,4 @@
-package org.superbiz.moviefun;
+package org.superbiz.moviefun.albums;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -8,34 +8,26 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestOperations;
-import org.springframework.web.client.RestTemplate;
+import org.superbiz.moviefun.ServiceCredentials;
 import org.superbiz.moviefun.blobstore.BlobStore;
 import org.superbiz.moviefun.blobstore.S3Store;
-import org.superbiz.moviefun.movies.MovieServlet;
-import org.superbiz.moviefun.movies.MoviesClient;
+
 
 @SpringBootApplication
-public class Application {
+public class AlbumServiceApplication {
 
     public static void main(String... args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(AlbumServiceApplication.class, args);
     }
 
     @Bean
-    public ServletRegistrationBean actionServletRegistration(MovieServlet movieServlet) {
-        return new ServletRegistrationBean(movieServlet, "/moviefun/*");
-    }
-
-    @Bean
-    org.superbiz.moviefun.ServiceCredentials serviceCredentials(@Value("${vcap.services}") String vcapServices) {
-        return new org.superbiz.moviefun.ServiceCredentials(vcapServices);
+    ServiceCredentials serviceCredentials(@Value("${vcap.services}") String vcapServices) {
+        return new ServiceCredentials(vcapServices);
     }
 
     @Bean
     public BlobStore blobStore(
-        org.superbiz.moviefun.ServiceCredentials serviceCredentials,
+        ServiceCredentials serviceCredentials,
         @Value("${vcap.services.photo-storage.credentials.endpoint:#{null}}") String endpoint
     ) {
         String photoStorageAccessKeyId = serviceCredentials.getCredential("photo-storage", "user-provided", "access_key_id");
@@ -51,5 +43,4 @@ public class Application {
 
         return new S3Store(s3Client, photoStorageBucket);
     }
-
 }
