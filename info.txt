@@ -1,0 +1,6 @@
+export MOVIES_URL=http://localhost:8082/movies
+export VCAP_SERVICES='{"user-provided": [{"credentials": {"access_key_id": "$accesskey", "bucket": "moviefun", "secret_access_key": "$secretkey", "endpoint": "http://192.168.10.133:9000"}, "name": "photo-storage"}]}'
+
+https://abhinav.apps.evans.pal.pivotal.io/
+
+./gradlew clean build -x test

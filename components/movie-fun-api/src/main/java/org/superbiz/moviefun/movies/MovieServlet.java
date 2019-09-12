@@ -14,11 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.superbiz.moviefun.moviesapi;
+package org.superbiz.moviefun.movies;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.superbiz.moviefun.moviesapi.MovieInfo;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -37,10 +36,10 @@ public class MovieServlet extends HttpServlet {
 
     public static int PAGE_SIZE = 5;
 
-    private  MoviesClient moviesClient;
+    private MoviesClient moviesClient;
 
-    public MovieServlet(MoviesClient moviesBean) {
-        this.moviesClient = moviesBean;
+    public MovieServlet(MoviesClient moviesClient) {
+        this.moviesClient = moviesClient;
     }
 
     @Override
@@ -65,8 +64,8 @@ public class MovieServlet extends HttpServlet {
             int year = Integer.parseInt(request.getParameter("year"));
 
             MovieInfo movie = new MovieInfo(title, director, genre, rating, year);
+
             moviesClient.addMovie(movie);
-            //moviesBean.addMovie(movie);
             response.sendRedirect("moviefun");
             return;
 
@@ -118,10 +117,8 @@ public class MovieServlet extends HttpServlet {
             List<MovieInfo> range;
 
             if (StringUtils.isEmpty(key) || StringUtils.isEmpty(field)) {
-                //range = moviesBean.findAll(start, PAGE_SIZE);
                 range = moviesClient.findAll(start, PAGE_SIZE);
             } else {
-                //range = moviesBean.findRange(field, key, start, PAGE_SIZE);
                 range = moviesClient.findRange(field, key, start, PAGE_SIZE);
             }
 

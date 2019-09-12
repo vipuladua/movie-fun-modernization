@@ -1,19 +1,17 @@
-package org.superbiz.moviefun.moviesapi;
+package org.superbiz.moviefun.albums;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestOperations;
-import static org.springframework.http.HttpMethod.GET;
+
 import java.util.List;
 
-@Repository
+import static org.springframework.http.HttpMethod.GET;
+
 public class AlbumClient {
 
     private String albumsUrl;
     private RestOperations restOperations;
-    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public AlbumClient(String albumsUrl, RestOperations restOperations) {
         this.albumsUrl = albumsUrl;
@@ -21,7 +19,6 @@ public class AlbumClient {
     }
 
     public void addAlbum(AlbumInfo album) {
-        logger.info("Albums url is::"+albumsUrl);
         restOperations.postForEntity(albumsUrl, album, AlbumInfo.class);
     }
 

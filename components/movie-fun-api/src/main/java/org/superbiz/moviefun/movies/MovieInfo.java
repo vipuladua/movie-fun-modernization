@@ -1,9 +1,13 @@
-package org.superbiz.moviefun.moviesapi;
+package org.superbiz.moviefun.movies;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Objects;
 
 public class MovieInfo {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String director;
@@ -11,6 +15,24 @@ public class MovieInfo {
     private int year;
     private String genre;
     private int rating;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MovieInfo)) return false;
+        MovieInfo movieInfo = (MovieInfo) o;
+        return id == movieInfo.id &&
+                year == movieInfo.year &&
+                rating == movieInfo.rating &&
+                director.equals(movieInfo.director) &&
+                title.equals(movieInfo.title) &&
+                genre.equals(movieInfo.genre);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, director, title, year, genre, rating);
+    }
 
     public MovieInfo() {
     }
@@ -75,23 +97,5 @@ public class MovieInfo {
 
     public void setRating(int rating) {
         this.rating = rating;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MovieInfo movieInfo = (MovieInfo) o;
-        return id == movieInfo.id &&
-                year == movieInfo.year &&
-                rating == movieInfo.rating &&
-                Objects.equals(director, movieInfo.director) &&
-                Objects.equals(title, movieInfo.title) &&
-                Objects.equals(genre, movieInfo.genre);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, director, title, year, genre, rating);
     }
 }

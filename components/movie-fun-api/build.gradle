@@ -1,14 +1,8 @@
 apply from: "../../java.gradle"
 
-
-apply plugin: "io.spring.dependency-management"
-
-group = "org.superbiz"
-version = "1.1.0-SNAPSHOT"
-description = "OpenEJB :: Web Examples :: MovieService"
-
 dependencies {
     compile project(":components:blobstore")
+
     compile "org.springframework:spring-web:$springVersion"
     compile "org.springframework:spring-context:$springVersion"
 

@@ -1,7 +1,6 @@
-package org.superbiz.moviefun.moviesapi;
+package org.superbiz.moviefun.movies;
 
 import org.springframework.stereotype.Component;
-import org.superbiz.moviefun.moviesapi.MovieInfo;
 
 import java.util.List;
 
