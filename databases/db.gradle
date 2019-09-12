@@ -3,7 +3,7 @@ import groovy.json.JsonSlurper
 private static Map acquireMysqlCredentials(databaseInstanceName) {
     execute(['cf', 'create-service-key', databaseInstanceName, 'flyway-migration-key'])
 
-    def serviceKeyJson = execute(['cf', 'service-key', databaseInstanceName, 'flyway-migration-key'])
+    def serviceKeyJson = execute(['cf', 'service-key', databaseInstanceName, 'cf-mysql'])
             .replaceFirst(/(?s)^[^{]*/, '')
 
     def map = new JsonSlurper().parseText(serviceKeyJson) as Map

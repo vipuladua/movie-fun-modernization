@@ -1,5 +1,6 @@
 import org.flywaydb.gradle.FlywayExtension
 import org.flywaydb.gradle.task.FlywayMigrateTask
+
 buildscript {
     dependencies {
         classpath "mysql:mysql-connector-java:$mysqlVersion"
@@ -10,18 +11,40 @@ plugins {
     id "org.flywaydb.flyway" version "5.2.1"
 }
 
+apply from: "../db.gradle"
+
 flyway {
     url = "jdbc:mysql://localhost:3306/albums?useSSL=false"
     user = "root"
     outOfOrder = false
 }
 
-task cfMigrate(type: FlywayMigrateTask) {
-    extension = new FlywayExtension(
-            url: "jdbc:mysql://127.0.0.1:63307/service_instance_db?useSSL=false",
-            user: "bae936cefe9c42f69be7f709ba1ddeae",
-            password: "8ge7pxw2mf6j9d5y",
-            outOfOrder: false,
-            baselineOnMigrate: true
-    )
+def tunnelProcess
+
+task openTunnel {
+    doLast {
+        println 'Opening Tunnel'
+        Thread.start {
+            tunnelProcess = "cf ssh -N -L 63306:${getMysqlHost("albums-mysql")}:3306 album-service".execute()
+        }
+
+        sleep 30_000L
+
+        if (tunnelProcess == null) throw new Exception("Unable to open tunnel!")
+    }
 }
+
+task closeTunnel {
+    doLast {
+        println 'Closing Tunnel'
+        tunnelProcess.destroy()
+    }
+}
+
+task cfMigrate(type: FlywayMigrateTask, dependsOn: openTunnel) {
+    doFirst {
+        extension = setupProdFlywayExtension(new FlywayExtension(), "albums-mysql")
+    }
+}
+
+cfMigrate.finalizedBy closeTunnel
